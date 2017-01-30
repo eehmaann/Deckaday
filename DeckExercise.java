@@ -133,11 +133,13 @@ public class DeckExercise extends JFrame implements ActionListener{
 		overallTime= new JTextField("Overall time: ");
 		overallTime.setEditable(false);
 		resultsScreen.add(overallTime);
+		
 		for(int i=0; i<4; i++){
 			finishes[i]= new JTextField("Test" +i);
 			finishes[i].setEditable(false);
 			resultsScreen.add(finishes[i]);
 		}
+		
 		restart.addActionListener(DeckExercise.this);
 		resultsScreen.add(restart);
 		
@@ -156,94 +158,97 @@ public class DeckExercise extends JFrame implements ActionListener{
 		frame.setVisible(true);
 		
 	}
-		/**
-			* This method set the beginning time for each movement in the deck
-			* As the user has spent no time doing the exercise to begin with, it is
-			* set to zero.
-			*
-			*/
-		public void setTimes(){
-			int col=1;
-			for	(int row=0; row<4; row++)
-			{
-				times[row][col]=0;
-			}
+	/**
+		* This method set the beginning time for each movement in the deck
+		* As the user has spent no time doing the exercise to begin with, it is
+		* set to zero.
+		*
+		*/
+	public void setTimes(){
+		int col=1;
+		for	(int row=0; row<4; row++){
+			times[row][col]=0;
 		}
-		/**
-			*  This method provides instructions for what the button should do,
-			*	as well as give instructions for when the button shouldn't work
-			*/
+	}
+	/**
+	*  This method provides instructions for what the button should do,
+	*	as well as give instructions for when the button shouldn't work
+	*/
 		
-		public void actionPerformed( ActionEvent e )
-    	{
-    		/* The option butttons set up the circuit that is going to be used.  
-    		*	The user must select four movements, one for each suit.  However,
-    		*	the user is able to select the same movement multiple times
-    		*/
-    		for (int i=0; i<16; i++){ 
-         		if (e.getSource()== options[i] && counter<4){ 
-         			circuit[counter]=movement[i][0];
-         			times[counter][0]=i;
-         			System.out.println(circuit[counter] + " : " +counter);
-         			counter++;		
-         		}        	
-        	}
-        	
-        	/* the start button will display an message, explaining what went 
-        	* 	what is required if set up isn't complete, else
-        	*	it will let the user begin the workout.
-        	*/
-        	
-        	if (e.getSource()==start){
-        		if (counter<4 || (setting.getSelectedItem().equals(" "))){
-        			JOptionPane.showMessageDialog(DeckExercise.this, 
-        						"Cannot proceed. You must select 4 moves and difficulty"+
-        						" must be set.  Currently you have selected " +counter+
-        						" moves and/or Difficulty is not set." +  
-        						setting.getSelectedItem());
-        		}
-        		else{
-        			cl.next(displayScreen);
-        			currentDif=Integer.parseInt((setting.getSelectedItem().toString()));
-        			startTime=seconds = 0;      //beginning seconds on clock
-        			drawCard();
-        			//sets up timer
-        			timer = new Timer(DELAY, this);
-        			timer.setInitialDelay(0);
-        			timer.start();
-        			setDone=false; // must be false for the timer to work.
-        		}
-        	}
-        	// next button will either show the results, or draw the next card
-        	if (e.getSource()==next){
-        		addTime();  //pressing next will always calculate time last task took
-        		if(deck.isEmpty()){
-        			cl.next(displayScreen);
-        			setDone=true;
-        		}
-        		else{
-        			drawCard();
-        			
-        		}
-        	}
-        	// restart button returns to the start of the program.  Saving only times
-        	if(e.getSource()==restart){
-        		cl.show(displayScreen, "1");
-        		clear();
-        	}
-        	// the timer will stop when the circuit is done, or will add seconds
-        	if(setDone)
-            { 
-                timer.stop();
-                showResults();
-            }
-            else
-            {
-                seconds++;
-                time.setText(displayTime());
-                
-            }
+	public void actionPerformed( ActionEvent e ){
+    	/* The option butttons set up the circuit that is going to be used.  
+    	*	The user must select four movements, one for each suit.  However,
+    	*	the user is able to select the same movement multiple times
+    	*/
+    	for (int i=0; i<16; i++){ 
+         	if (e.getSource()== options[i] && counter<4){ 
+         		circuit[counter]=movement[i][0];
+         		times[counter][0]=i;
+         		System.out.println(circuit[counter] + " : " +counter);
+         		counter++;		
+         	}        	
         }
+        	
+        /* the start button will display an message, explaining what went 
+        * 	what is required if set up isn't complete, else
+        *	it will let the user begin the workout.
+        */
+        	
+        if (e.getSource()==start){
+        	if (counter<4 || (setting.getSelectedItem().equals(" "))){
+        		JOptionPane.showMessageDialog(DeckExercise.this, 
+        			"Cannot proceed. You must select 4 moves and difficulty"+
+        			" must be set.  Currently you have selected " +counter+
+        			" moves and/or Difficulty is not set." +  
+        			setting.getSelectedItem());
+        	}
+        		
+        	else{
+        		cl.next(displayScreen);
+        		currentDif=Integer.parseInt((setting.getSelectedItem().toString()));
+        		startTime=seconds = 0;      //beginning seconds on clock
+        		drawCard();
+        		
+        		//sets up timer
+        		timer = new Timer(DELAY, this);
+        		timer.setInitialDelay(0);
+        		timer.start();
+        		setDone=false; // must be false for the timer to work.
+        	}
+        }
+        	
+        // next button will either show the results, or draw the next card
+        if (e.getSource()==next){
+        	addTime();  //pressing next will always calculate time last task took
+        	if(deck.isEmpty()){
+        		cl.next(displayScreen);
+        		setDone=true;
+        	}
+        		
+        	else{
+        		drawCard();	
+        	}
+        }
+        	
+        // restart button returns to the start of the program.  Saving only times
+        if(e.getSource()==restart){
+        	cl.show(displayScreen, "1");
+        	clear();
+        }
+        
+        // the timer will stop when the circuit is done, or will add seconds
+        	
+        if(setDone){ 
+            timer.stop();
+            showResults();
+        }
+            
+         else{
+            seconds++;
+             time.setText(displayTime());
+                
+        }
+    }
     
     /***
     	* This method creates the display for time.  It will display in mm:ss format
@@ -253,22 +258,24 @@ public class DeckExercise extends JFrame implements ActionListener{
     public String displayTime()
     {
     	
-    	if(seconds%60<10)
-        {
-            myTime=(""+seconds/60 +":0"+seconds%60); 
-            //this ensures seconds is two digit number.
+    	if(seconds%60<10){
+           myTime=(""+seconds/60 +":0"+seconds%60); 
+           //this ensures seconds is two digit number.
         }
+        
         else{
                 myTime=(""+seconds/60 +":"+seconds%60);
-            }
+         }
         return myTime;
     } 
+    
     /**
     	* This method will be add time to the exercise type being performed.  Thus making
     	* it possible to calculate averages at the end of the workout. 
     	*
     	*/
-     public void addTime(){
+    
+    public void addTime(){
      	endTime=seconds;
      	int totalTime= endTime-startTime;
      	for(int i=0; i<4; i++){
@@ -277,7 +284,7 @@ public class DeckExercise extends JFrame implements ActionListener{
      		}     	
      	}
      	startTime=seconds;
-     }
+    }
      
     /**
     	* This method will do all the actions that associated with drawing a new card
@@ -303,22 +310,27 @@ public class DeckExercise extends JFrame implements ActionListener{
     	* @param card the randomly selected card showing suit and numeric value
     	* @param value the numeric value on the card
     	*/
-    public void changeCommand(String card, int value)
-    {
+    
+    public void changeCommand(String card, int value){
     	if(card.contains("clubs")){
     	translateSuit=circuit[0];
     	}
+    	
     	else if(card.contains("diamonds")){
     	translateSuit=circuit[1];
     	}
+    	
     	else if(card.contains("hearts")){
     	translateSuit=circuit[2];
     	}
+    	
     	else if(card.contains("spades")){
     	translateSuit=circuit[3];
     	}
+    	
     	command.setText("Do " + value + " " + translateSuit);
     }
+    
     /**
     	* This method will change the screen to display the next card
     	*  It will also translate the numeric value into the corresponding face.
@@ -326,8 +338,8 @@ public class DeckExercise extends JFrame implements ActionListener{
     	* @param card the current randomly chosen card
     	* @param value the numeric value on the card
     	*/
-    public void changeCurrentCard(String card, int value)
-    {
+    
+    public void changeCurrentCard(String card, int value){
     	if(value<11){
     		currentCard.setText(card);
     	}

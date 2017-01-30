@@ -1,12 +1,15 @@
 # Deckaday
 
 ## Description
-This application is intended to be used for athletes who want to do a workout using a
-deck of cards.  The user will be able to assign an exercise to every suit, and the program
-will randomly go through the deck of cards, telling the user the exercise and number of
-repetitions that must be performed for that card.
-The program will track the time it takes to complete the full deck as well as the time 
-per type of exercise and give the athlete metrics on which to gauge performance.
-This application made with Java 7.  It will currently not compile when under Java 8
-
-
+One common exercise routine that athletes will do is take a randomly shuffled 
+deck of cards and choose each suit to represent a different kind of exercise. 
+Then they flip over the cards the one by and do the exercise and reps that were drawn,
+(with Jack representing 11, Queen representing 12, king representing 13, and Ace 
+representing 14).  This program allows for the user to have this experience, without 
+having a physical deck of cards.  When loading then program, can select four exercises
+to do among a selection of 16 exercises, with the possibility of selecting the same one
+twice.  To keep different profiles, the user must select difficulty.  After pressing start
+the time will begin, and the user will continue pressing next until all exercises and reps
+are completed.  At which time the user will be given a time, and an opportunity to start
+a new workout.  
+This application made with Java Version 1.6.0_65.  
