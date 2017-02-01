@@ -12,4 +12,4 @@ the same one multiple times.  To keep different profiles, the user must select d
 After pressing start the time will begin, and the user will continue pressing next until
 all exercises and reps are completed.  At which time the user will be given a time, and
 an opportunity to start a new workout.  
-This application made with Java Version 1.6.0_65.  
+This application was made with Java Version 1.6.0_65.  
