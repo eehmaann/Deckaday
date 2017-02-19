@@ -3,8 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.lang.*;
 import java.util.ArrayList;
-public class deckaday{
+public class Deckaday{
 public static void main(String[] args) {
-		selectionscreen SE = new selectionscreen();
+		Screens deckExercise = new Screens();
 	}
 }
