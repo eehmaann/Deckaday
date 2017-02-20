@@ -6,8 +6,8 @@ public class ExerciseButton extends JButton{
 	private JButton exerciseButton;
 	// = new JButton ("Undo");
 	public ExerciseButton (String label, ActionListener listener){
-		super();
-		JButton exerciseButton= new JButton ("Pizza");
+		super(label);
+		JButton exerciseButton= new JButton ("");
 			exerciseButton.setFont (new Font ("Times", Font.BOLD, 12));
             exerciseButton.setHorizontalAlignment(JButton.CENTER);
             exerciseButton.setPreferredSize(new Dimension(100,100));

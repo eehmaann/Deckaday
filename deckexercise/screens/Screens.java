@@ -32,7 +32,7 @@ public class Screens extends JFrame implements ActionListener{
 	
 	public Screens(){
 		exerciseChoices= new String[] {"Air Squats","Burpees","Butt Bridges","Bicycle Kicks","Broad Jumps","Crunches",
-		"Flutter Kicks","Jumping Jacks", "Lunges", "Leg Lifts", "Mnt. Clinmbers", "Pistols", "Push Ups", "Sit-ups", "Squats", "Tricep Dips"};
+		"Flutter Kicks","Jumping Jacks", "Lunges", "Leg Lifts", "Mnt. Climbers", "Pistols", "Push Ups", "Sit-ups", "Squats", "Tricep Dips"};
 		buildApplicationLayout();
 		buildexerciseSelection();
 		buildDrawnExerciseScreen();
@@ -91,8 +91,7 @@ public class Screens extends JFrame implements ActionListener{
 
 	public void configureExcerciseButtons( String[]exerciseChoices){
 		for(int i = 0; i< exerciseChoices.length; i++){
-			System.out.println(exerciseChoices[i]);
-			exerciseButtons[i]= new ExerciseButton ("Pizza", Screens.this);
+			exerciseButtons[i]= new ExerciseButton (exerciseChoices[i], Screens.this);
 			exerciseSelectionScreen.add(exerciseButtons[i]);            
 		}
 	}
