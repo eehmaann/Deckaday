@@ -14,36 +14,22 @@ import java.awt.event.*;
 import java.lang.*;
 import java.util.ArrayList;
 
-public class Screens extends JFrame implements ActionListener{
+public abstract class Screens extends JFrame{
 	String[] exerciseChoices;
-	private ExerciseButton[] exerciseButtons = new ExerciseButton[16];
-	private JButton startButton = new JButton ("Start");
-	private JButton undoButton = new JButton ("Undo");
-	private JLabel [] suitSelections = new JLabel[4];
-	private JPanel applicationScreens = new JPanel(new CardLayout());
-	private JPanel exerciseSelectionScreen = new JPanel ();
-	private JPanel drawnExerciseScreen = new JPanel();
-	private JPanel resultsScreen= new JPanel();
-	private Timer timer; 
+	protected ExerciseButton[] exerciseButtons = new ExerciseButton[16];
+	protected JButton startButton = new JButton ("Start");
+	protected JButton undoButton = new JButton ("Undo");
+	protected JButton next = new JButton ("Next");
+	protected JLabel [] suitSelections = new JLabel[4];
+	protected JLabel[] suitLabels = new JLabel[4]; 
+	protected JPanel applicationScreens = new JPanel(new CardLayout());
+	protected JPanel exerciseSelectionScreen = new JPanel ();
+	protected JPanel drawnExerciseScreen = new JPanel();
+	protected JPanel resultsScreen= new JPanel();
+	protected Timer timer; 
 	CardLayout cardLayout = new CardLayout();
 	private JFrame frame = new JFrame("");
 	
-	
-	
-	public Screens(){
-		exerciseChoices= new String[] {"Air Squats","Burpees","Butt Bridges","Bicycle Kicks","Broad Jumps","Crunches",
-		"Flutter Kicks","Jumping Jacks", "Lunges", "Leg Lifts", "Mnt. Climbers", "Pistols", "Push Ups", "Sit-ups", "Squats", "Tricep Dips"};
-		buildApplicationLayout();
-		buildexerciseSelection();
-		buildDrawnExerciseScreen();
-		buildResultsScreen();
-		configureExcerciseButtons(exerciseChoices);
-		configureUndoButton();
-		configureStartButton();
-		configureNextButton();
-		createTimer();
-		showScreen();
-	}
 
 	public String[] getexerciseChoices(){
 		return exerciseChoices;
@@ -53,7 +39,7 @@ public class Screens extends JFrame implements ActionListener{
 		applicationScreens.setLayout(new CardLayout());		
 	}
 	public void buildexerciseSelection(){
-		exerciseSelectionScreen.setLayout (new GridLayout (5, 4) );
+		exerciseSelectionScreen.setLayout (new GridLayout (7, 4) );
 		exerciseSelectionScreen.setBackground(Color.GREEN);
 		applicationScreens.add(exerciseSelectionScreen, "1");
 	}
@@ -91,24 +77,30 @@ public class Screens extends JFrame implements ActionListener{
 
 	public void configureExcerciseButtons( String[]exerciseChoices){
 		for(int i = 0; i< exerciseChoices.length; i++){
-			exerciseButtons[i]= new ExerciseButton (exerciseChoices[i], Screens.this);
+			 exerciseButtons[i]= new ExerciseButton (exerciseChoices[i]);
 			exerciseSelectionScreen.add(exerciseButtons[i]);            
 		}
 	}
 
+	public void configureSuitLabels(){
+		String[] suitList =new String[]{"Clubs: ", "Diamonds: ", "Hearts: ", "Spades: "};
+		for(int i =0; i<4; i++){
+			suitLabels[i] = new JLabel(suitList[i]);
+			suitSelections[i]= new JLabel("Make Selection");
+			exerciseSelectionScreen.add(suitLabels[i]);
+			exerciseSelectionScreen.add(suitSelections[i]);
+		}
+	}
+
 	public void configureUndoButton(){
-		undoButton.addActionListener (Screens.this);
 		exerciseSelectionScreen.add(undoButton);
 	}
 
 	public void configureStartButton(){
-		startButton.addActionListener (Screens.this);
 		exerciseSelectionScreen.add(startButton);
 	}
 
 	public void configureNextButton(){
-		JButton next = new JButton ("Next");
-		next.addActionListener (Screens.this);
 		drawnExerciseScreen.add(next, BorderLayout.EAST);
 	}
 
@@ -118,10 +110,5 @@ public class Screens extends JFrame implements ActionListener{
 		time.setFont (new Font ("Ariel", Font.BOLD, 20));
 		drawnExerciseScreen.add(time, BorderLayout.NORTH); 
 	}
-
-
-
-	public void actionPerformed( ActionEvent e ){
-	}
-
+	
 }

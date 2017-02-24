@@ -1,4 +1,4 @@
-//  cards.java
+//  Cards.java
 
 /**
  *  This is a class for constructin a deck of cards
@@ -8,24 +8,21 @@
  */
 import java.util.*;
 
-public abstract class Cards{
+public class Cards{
     
   protected ArrayList<Integer> deck = new ArrayList<Integer>();
   protected int deckSize;
+  protected int counter;
   final int suitRun = 13;
+  public String[]circuit;
   /**
   *  This is the constructor method for creating a deck of cards
   *  
   */
  public Cards(){
+    counter=0;
+    circuit = new String[4];
     this.deckSize=52;
-    for(int i=0; i<deckSize; i++){
-      deck.add(i);
-    }
-  }
-
-   public Cards(int deckSize){
-    this.deckSize=deckSize;
     for(int i=0; i<deckSize; i++){
       deck.add(i);
     }
@@ -50,15 +47,11 @@ public abstract class Cards{
   * @return String card the value of the card
   * @override toString
   */
-  public String toString(String suit, String card){
+  public String getCardName(String suit, String card){
     String nameCard= suit + " " + card;
     return nameCard;
   }
   
-  public String toString(int nc){
-    String nameCard = "Joker";
-    return nameCard;
-  }
 
   /**
   * This method will get the value of the card within a suit.
@@ -66,7 +59,7 @@ public abstract class Cards{
   *@param int the number of the card
   *@return int with value of the card within the suit
   */
-    public int getNum(int nc){
+    public int getNumber(int nc){
     return nc%suitRun;
   }
   /**
@@ -78,20 +71,13 @@ public abstract class Cards{
     */
 
   public String getValue(int gn){
-    String card;
     switch (gn) {
-      case 9:  card = "Jack";
-            break;
-      case 10:  card = "Queen";
-            break;
-      case 11:  card = "King";
-            break;
-      case 12:  card = "Ace";
-            break;
-      default: card = String.valueOf(gn+2);
-            break;
+      case 9:  return "Jack";
+      case 10: return "Queen";
+      case 11: return "King";
+      case 12: return "Ace";
+      default: return String.valueOf(gn+2);
       } // Goes through all possible numbers add two for starting at 0 and having no 1 of a suit 
-      return card;
     }
 
   /**
@@ -111,19 +97,29 @@ public abstract class Cards{
     *@return String the suit 
     */
   public String getSuit(int sV){
-    String suit;
+    String[] suitlist =new String[]{"Clubs", "Diamonds", "Hearts", "Spades"};
+      return suitlist[sV];
+    }
 
-    switch(sV){
-      case 0: suit="Clubs";
-            break;
-      case 1: suit="Diamonds";
-            break;
-      case 2: suit="Hearts";
-            break;
-      default: suit="Spades";
-            break;
-      }
-      return suit;
+  public String getSet (int reps, int suit){
+    String words= (reps +2) + " " +circuit[suit];
+    return words;
+  }
+
+  public void setMovement (int suit, String movement){
+    circuit[suit]=movement;
+  }
+
+  public void increaseCounter(){
+    counter++;
+  }
+  public void decreaseCounter(){
+    if(counter>0){
+      counter--;
+    }
+  }
+  public int getCounter(){
+    return counter;
   }
 
 }
