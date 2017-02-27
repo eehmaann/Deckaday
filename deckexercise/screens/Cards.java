@@ -28,13 +28,17 @@ public class Cards{
     }
   }
 
+  public int countCards(){
+    return deck.size();
+  }
+
   /** 
   * this will get a random card from the deck and remove it from the remaining cards
   *
   * @ return int
   */
   public int nextCard(){
-    int randomCard = (int )(Math.random() * deck.size());
+    int randomCard = (int )(Math.random() * countCards());
     int flipped=deck.get(randomCard);
     deck.remove(randomCard);
     return flipped;
@@ -47,8 +51,8 @@ public class Cards{
   * @return String card the value of the card
   * @override toString
   */
-  public String getCardName(String suit, String card){
-    String nameCard= suit + " " + card;
+  public String getCardName(int newCard){
+    String nameCard= (getValue(getNumber(newCard)) + "of" + getSuit(getSuitValue(newCard)));
     return nameCard;
   }
   
@@ -101,9 +105,9 @@ public class Cards{
       return suitlist[sV];
     }
 
-  public String getSet (int reps, int suit){
-    String words= (reps +2) + " " +circuit[suit];
-    return words;
+  public String getSet (int cardNumber){
+    String currentSet= (getNumber(cardNumber)+2) + " " +circuit[getSuitValue(cardNumber)];
+    return currentSet;
   }
 
   public void setMovement (int suit, String movement){

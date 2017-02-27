@@ -19,16 +19,19 @@ public abstract class Screens extends JFrame{
 	protected ExerciseButton[] exerciseButtons = new ExerciseButton[16];
 	protected JButton startButton = new JButton ("Start");
 	protected JButton undoButton = new JButton ("Undo");
-	protected JButton next = new JButton ("Next");
+	protected JButton nextButton = new JButton ("Next");
+	private JFrame frame = new JFrame("");
 	protected JLabel [] suitSelections = new JLabel[4];
 	protected JLabel[] suitLabels = new JLabel[4]; 
 	protected JPanel applicationScreens = new JPanel(new CardLayout());
 	protected JPanel exerciseSelectionScreen = new JPanel ();
 	protected JPanel drawnExerciseScreen = new JPanel();
 	protected JPanel resultsScreen= new JPanel();
+	protected JTextField time= new JTextField ("0:00");
+	protected JTextField command = new JTextField (" 14 Mountain Climbers "); // shows current exercise
 	protected Timer timer; 
 	CardLayout cardLayout = new CardLayout();
-	private JFrame frame = new JFrame("");
+	
 	
 
 	public String[] getexerciseChoices(){
@@ -46,7 +49,6 @@ public abstract class Screens extends JFrame{
 
 	public void buildDrawnExerciseScreen(){
 		drawnExerciseScreen.setLayout (new BorderLayout());
-		JTextField command = new JTextField (" 14 Mountain Climbers "); // shows current exercise
 		command.setHorizontalAlignment(SwingConstants.CENTER);
 		command.setFont (new Font ("Ariel", Font.BOLD, 26));
 		command.setEditable(false);
@@ -101,11 +103,10 @@ public abstract class Screens extends JFrame{
 	}
 
 	public void configureNextButton(){
-		drawnExerciseScreen.add(next, BorderLayout.EAST);
+		drawnExerciseScreen.add(nextButton, BorderLayout.EAST);
 	}
 
 	public void createTimer(){
-		JTextField time= new JTextField ("0:00");
 		time.setHorizontalAlignment(SwingConstants.CENTER);
 		time.setFont (new Font ("Ariel", Font.BOLD, 20));
 		drawnExerciseScreen.add(time, BorderLayout.NORTH); 
