@@ -27,7 +27,10 @@ public class Cards{
       deck.add(i);
     }
   }
-
+  /**
+  * This method will return the number of cards remaining.
+  * @return size of arrayList containing the numeric representation of the cards
+  */
   public int countCards(){
     return deck.size();
   }
@@ -49,11 +52,10 @@ public class Cards{
   * This method will take the card value of show the value and suit of the card
   * @return String suit the suit of the card
   * @return String card the value of the card
-  * @override toString
   */
   public String getCardName(int newCard){
-    String nameCard= (getValue(getNumber(newCard)) + "of" + getSuit(getSuitValue(newCard)));
-    return nameCard;
+    return((getValue(getNumber(newCard)) + " of " + getSuit(getSuitValue(newCard))));
+  
   }
   
 
@@ -81,7 +83,7 @@ public class Cards{
       case 11: return "King";
       case 12: return "Ace";
       default: return String.valueOf(gn+2);
-      } // Goes through all possible numbers add two for starting at 0 and having no 1 of a suit 
+      } // will add two because value can be 0, but lowest card is 2
     }
 
   /**
@@ -105,23 +107,52 @@ public class Cards{
       return suitlist[sV];
     }
 
+  /** This method will determine take an int and return the type of movement and number
+  * of repetitions that the user must do.
+  *@param cardNumber a integer representing what card number it is.
+  *@return String stating the movement. 
+  */
   public String getSet (int cardNumber){
-    String currentSet= (getNumber(cardNumber)+2) + " " +circuit[getSuitValue(cardNumber)];
-    return currentSet;
+    return ((getNumber(cardNumber)+2) + " " +getMovement(getSuitValue(cardNumber)));
   }
 
+  /** 
+  * This method will take a number and return a string based on a previous decided movement.
+  *
+  *@param int number reprsenting circuit
+  *@return string stating the movement
+  */
+  public String getMovement(int circuitNumber){
+    return circuit[circuitNumber];
+  }
+
+  /**
+  * This method will set one of the four movements the user will be doing throughout the workout
+  *@param suit an integer representing which card suit the movement will be associated with
+  *@param movement a string with the name of a a movement on it.
+  */
   public void setMovement (int suit, String movement){
     circuit[suit]=movement;
   }
 
+  /**
+  * This method will increase the counter being used to decide which suit is being chosen
+  */
   public void increaseCounter(){
     counter++;
   }
+  /**
+  * This method will decrease the counter being used to determine which suit a movement is being chosen for
+  */
   public void decreaseCounter(){
     if(counter>0){
       counter--;
     }
   }
+
+  /*
+  * This method will return the number of the counter, which represents which suit a movement is being chosen for
+  */
   public int getCounter(){
     return counter;
   }
