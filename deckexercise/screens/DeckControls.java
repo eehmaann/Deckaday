@@ -11,13 +11,13 @@ import java.lang.*;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
 
-public class DeckControls extends DeckBuilder implements ActionListener{
+public class DeckControls extends Screens implements ActionListener{
 	protected Cards currentDeck;
 	protected boolean isTimed;
 	protected int seconds;
 	protected int startTime =0;
 	protected int previousSuit;
-	protected int[] suitTimes ={0,0,0,0};
+	protected int[] suitTimes = {0,0,0,0};
 	public final double REPS = 104.00;
 
 	/** 
@@ -35,43 +35,56 @@ public class DeckControls extends DeckBuilder implements ActionListener{
 		for(int i = 0; i< exerciseChoices.length; i++){
 			exerciseButtons[i].addActionListener(DeckControls.this);
 		}
-		undoButton.addActionListener (DeckControls.this);
-		startButton.addActionListener (DeckControls.this);
-		nextButton.addActionListener (DeckControls.this);
+		undoButton.addActionListener(DeckControls.this);
+		startButton.addActionListener(DeckControls.this);
+		nextButton.addActionListener(DeckControls.this);
+	}
+
+		// This method will turn the timer on or off
+	public void toggleTimer() {
+		isTimed ^= true;
 	}
 	/**
 	* This method will initiate a new timer so the seconds can be tracked.
 	*/
-	public void startTimer(){
+	public void startTimer() {
 		timer = new Timer(1000, DeckControls.this);
         timer.setInitialDelay(0);
         timer.start();
-        toggleActive();
+        toggleTimer();
 	}
+
 	/**
 	* This method checks if the conditions have been met for the timer to start
 	* and will return a boolean representing the answer
 	*@return boolean true if conditions have been met for the timer to start
 	*/
-	public boolean checkActive(){
+	public boolean checkTimer() {
 		return isTimed;
 	}
 
-	// This method will turn the timer on or off
-	public void toggleActive(){
-		isTimed ^= true;
+	// This method returns a string value for how the time should be displayed
+	public String displayTime(int theseSeconds) {
+		return((""+((theseSeconds/60)+100)).substring(1) + ":" + (""+(100+(theseSeconds%60))).substring(1));
 	}
 
 	// This method provides the actions that must be done if the timer is active
-	public void runTimer(){
-		if(checkActive()){
+	public void runTimer() {
+		if(checkTimer()){
 				seconds++;
 				time.setText(displayTime(seconds));
 			}
 	}
-	// This method returns a string value for how the time should be displayed
-	public String displayTime(int theseSeconds){
-		return ((""+((theseSeconds/60)+100)).substring(1) + ":" + (""+(100+(theseSeconds%60))).substring(1));
+		
+	/**
+	* This method will be used to measure the number of seconds that it took the user to do that particular
+	* movement and repetitions.  It will add to the time already spent on that particular suit.
+	*/
+	public void addTime(int suit) {
+		int endTime=seconds;
+		int duration = endTime-startTime;
+		suitTimes[suit]+=duration;
+		startTime=seconds;
 	}
 
 
@@ -79,23 +92,13 @@ public class DeckControls extends DeckBuilder implements ActionListener{
 	* This method will take a card at random and display the informations on the screen
 	* to show both the card that was drawn and what movement and number of repittions that translates into
 	*/
-	public void drawSet(){
+	public void drawSet() {
 		int currentCard=currentDeck.nextCard();
 		previousSuit=currentDeck.getSuitValue(currentCard);
         command.setText(currentDeck.getSet(currentCard));
         cardDisplay.setText(currentDeck.getCardName(currentCard));
 	}
 
-	/**
-	* This method will be used to measure the number of seconds that it took the user to do that particular
-	* movement and repetitions.  It will add to the time already spent on that particular suit.
-	*/
-	public void addTime(int suit){
-		int endTime=seconds;
-		int duration = endTime-startTime;
-		suitTimes[suit]+=duration;
-		startTime=seconds;
-	}
 
 	/** 
 	* This method will calculate the average number seconds to do a particular movement or all movements and 
@@ -105,10 +108,10 @@ public class DeckControls extends DeckBuilder implements ActionListener{
 	*
 	*@String  represent the calculated average
 	*/
-	public String getAverageTime(int totalSeconds, int movements){
+	public String getAverageTime(int totalSeconds, int movements) {
 		DecimalFormat dc = new DecimalFormat("0.00");
 		double averageTime=totalSeconds/(movements *REPS);
-			return (" Average " +dc.format(averageTime) + "seconds per rep ");
+			return(" Average " +dc.format(averageTime) + "seconds per rep ");
 
 	}
 
@@ -119,16 +122,18 @@ public class DeckControls extends DeckBuilder implements ActionListener{
 	*
 	*@return String a statement showing the seconds as minutes and seconds
 	*/
-	public String getTotalTime(int totalSeconds){
-		return ("Total time: " + displayTime(totalSeconds));
+	public String getTotalTime(int totalSeconds) {
+		return("Total time: " + displayTime(totalSeconds));
 	}
 
 	/**
-	* This method sets teh text on the a textfield of the results page, showing the total time to do the deck and the average 
-	* of seconds is took to complete a movement
+	* This method sets the text on the a textfield of the results page, showing the total time to do the deck and the average 
+	* number of seconds it took to complete a movement
 	*/
-	public void displayOverallResults(){
-		JTextField overallTime = new JTextField("Overall "+ getTotalTime(seconds)+getAverageTime(seconds,4));
+	public void displayOverallResults() {
+		String totalTime = getTotalTime(seconds);
+		String averageTime = getAverageTime(seconds,4);
+		JTextField overallTime = new JTextField("Overall "+ totalTime + averageTime);
 		overallTime.setEditable(false);
 		resultsScreen.add(overallTime);
 	}
@@ -137,54 +142,55 @@ public class DeckControls extends DeckBuilder implements ActionListener{
 	* This methods creates a textfield for each suit, displaying the movement, the total time spent on these movements
 	* and the average time it to took complete the movement once.
 	*/
-	public void displayMovementResults(){
+	public void displayMovementResults() {
 		JTextField[] moveTimes = new JTextField[4];
-		for(int i=0; i<4; i++){
-			moveTimes[i] = new JTextField(currentDeck.getMovement(i)+ " "+getTotalTime(suitTimes[i]) + getAverageTime(suitTimes[i], 1));
+		for(int i=0; i<4; i++) {
+			String movement = currentDeck.getMovement(i) + " ";
+			String totalTime = getTotalTime(suitTimes[i]);
+			String averageTime = getAverageTime(suitTimes[i], 1);
+			moveTimes[i] = new JTextField(movement + totalTime + averageTime);
 			moveTimes[i].setEditable(false);
 			resultsScreen.add(moveTimes[i]);
 
 		}
 	}
 
-
-
 	/** 
-		*This method is shows what actions will happen when buttons are pressed
+		*This method detemines what actions will happen throughout the program
 		*/
 
-	public void actionPerformed( ActionEvent e ){
+	public void actionPerformed( ActionEvent e ) {
 			runTimer();
-         	for (int i=0; i<16; i++){ 
-         		if (e.getSource()== exerciseButtons[i] && currentDeck.getCounter()<4){
+         	for (int i=0; i<16; i++) { 
+         		if (e.getSource()== exerciseButtons[i] && currentDeck.getCounter()<4) {
          		int count = currentDeck.getCounter();
          		suitSelections[count].setText(exerciseChoices[i]);
          		repaint();
-         		currentDeck.setMovement (currentDeck.getCounter(), exerciseChoices[i]);
+         		currentDeck.setMovement(currentDeck.getCounter(), exerciseChoices[i]);
          		currentDeck.increaseCounter();		
          	}        	
         }
-         	if (e.getSource()== startButton && currentDeck.getCounter() == 4){ 
+         	if (e.getSource()== startButton && currentDeck.getCounter() == 4) { 
          		cardLayout.next(applicationScreens);
          		drawSet();
          		startTimer();
          	}
 
-         	if (e.getSource()==undoButton){
+         	else if (e.getSource()==undoButton) {
          		currentDeck.decreaseCounter();
          		int count = currentDeck.getCounter();
          		suitSelections[count].setText("Make Selection");
          		repaint();
          	}
 
-         	if (e.getSource()==nextButton){
+         	else if (e.getSource()==nextButton) {
          		addTime(previousSuit);
-         		if(currentDeck.countCards()==0){
+         		if(currentDeck.countCards()==0) {
          			cardLayout.next(applicationScreens);
          			displayOverallResults();
          			displayMovementResults();
          		}
-         		else{
+         		else {
          			drawSet();
          		}
          	}
